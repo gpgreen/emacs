@@ -12,7 +12,7 @@
       (load-file custom-file))
   ;;
   ;; gnu emacs
-  (if (file-readable-p "~/emacs/gpg-emacs")
-      (load "~/emacs/gpg-emacs" nil t))
+  (if (file-readable-p "~/emacs/gpg-emacs.el")
+      (load "~/emacs/gpg-emacs.el" nil t))
 ;;;
 )
