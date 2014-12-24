@@ -100,7 +100,7 @@
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
 
-(load "random_back")
+;(load "random_back")
 
 ;; Shell stuff
 (defun gpg-shell-setup ()
