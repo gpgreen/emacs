@@ -1,5 +1,7 @@
 ;; $Id: .gnu-emacs,v 1.11 2004/09/06 21:03:10 ggreen Exp $
 
+(display-message-or-buffer "Loading gpg's stuff")
+
 ;;; LOCATION SWITCHER MACRO
 ;;; macro to switch between different working locations
 ;;; first form is at home, second is at work
@@ -10,58 +12,27 @@
 	(cons 'progn home)
 	(cons 'progn work)))
 
-;; Some macros
-;(defmacro Xlaunch (&rest x)
-;  (list 'if (eq window-system 'x)(cons 'progn x)))
+;;;;;
+;;;;; PACKAGE MANAGER
+(require 'package)
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
 
 ;; Set Font Lock Mode
 (global-font-lock-mode t)
 ; maximize font lock mode
 (setq font-lock-mode-maximum-decoration t)
-;(require 'font-lock)
-;(setq font-lock-use-default-fonts nil)
-;(setq font-lock-use-default-colors nil)
-;(copy-face 'default 'font-lock-string-face)
-; builtin
-; comment-delimiter
-; comment
-; constant
-; doc
-; function-name
-; keyword
-; negation-char
-; preprocessor
-; regexp-grouping-backslash
-; regexp-grouping-construct
-; string
-; type
-; variable-name
-; warning
-;(set-face-foreground 'font-lock-string-face "Sienna")
-;(copy-face 'italic 'font-lock-comment-face)
-;(set-face-foreground 'font-lock-comment-face "Red")
-;(copy-face 'bold 'font-lock-function-name-face)
-;(set-face-foreground 'font-lock-function-name-face "MediumBlue")
-;(copy-face 'default 'font-lock-keyword-face)
-;(set-face-foreground 'font-lock-keyword-face "SteelBlue")
-;(copy-face 'default 'font-lock-type-face)
-;(set-face-foreground 'font-lock-type-face "DarkOliveGreen")
 
 ;;; some colors
 (set-face-foreground 'mode-line "red")
 (set-face-background 'mode-line "lemonchiffon")
 (setq transient-mark-mode 't)
-;(Xlaunch (make-face-bold 'bold-italic))
-;(set-face-foreground 'bold-italic "Blue")
 
 ;; default geometry
 (setq default-frame-alist
       '(
 	(width . 80) (height . 50)
-;	(cursor-color . "Ivory")
-;	(cursor-type . box)
-;	(foreground-color . "Black")
-;	(background-color . "Ivory")
 ))
 
 ;; turn on column numbers
@@ -78,10 +49,8 @@
        load-path
        (list
 	"~/emacs"
-;	"~/emacs/html-helper-mode"
 	"~/go/misc/emacs"
 	"~/lib/erlang/lib/tools-2.6.6.4/emacs")))
-;	"~/emacs/ilisp-5.12.0")))
 
 ;; useful function keys
 ;; --------------------
@@ -127,15 +96,8 @@
 )
 (add-hook 'text-mode-hook 'gpg-text-mode-hook)
 
-;; load html-helper-mode
-;(autoload 'html-helper-mode "html-helper-mode" "Yay HTML" t)
-;(setq html-helper-do-write-file-hooks t)
-;(setq html-helper-build-new-buffer t)
-;(switch-location
-; ((setq html-helper-address-string
-;       "<a href=\"mailto:ggreen@bit-builder.com\">Greg Green &lt;ggreen@bit-builder.com&gt;</a>"))
-; ((setq html-helper-address-string 
-;       "<a href=\"mailto:gregory.p.green@boeing.com\">Greg Green &lt;gregory.p.green@boeing.com&gt;</a>")))
+;;;; FLYCHECK
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;;; CEDET
 ;; Load CEDET
@@ -194,6 +156,23 @@
   ;(load "c++-stuff")
 )
 
+;; javascript
+(defun gpg-js-mode-hook ()
+  (setq indent-tabs-mode nil))
+
+(add-hook 'js-mode-hook 'gpg-js-mode-hook)
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+
+(eval-after-load 'js2-mode
+  '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+(eval-after-load 'json-mode
+  '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+(eval-after-load 'sgml-mode
+  '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+(eval-after-load 'css-mode
+  '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
+
 ;(require 'jde)
 ;(defun gpg-java-mode-hook ()
   ;; jde
@@ -206,11 +185,6 @@
 ;; needs go-mode-load.el
 ;; see load-path at top of file
 ;require 'go-mode-load)
-
-;; compile command
-;(switch-location
-; ((setq compile-command "make"))
-; ((setq compile-command "pmake -f RtMakefile")))
 
 ;; set the hooks
 (add-hook 'c-mode-common-hook 'gpg-c-mode-common-hook)
@@ -242,14 +216,11 @@
 
 ;; auto-mode stuff
 (setq auto-mode-alist 
-      (append '(("\\.html$" . html-helper-mode)
-		("\\.h$" . c++-mode)
+      (append '(("\\.h$" . c++-mode)
 		("\\.icc$" . c++-mode)
                 ("\\.mk$" . makefile-mode)
 		("\\.mkd$" . makefile-mode)
 		("akefile" . makefile-mode)
-		("\\.py$" . python-mode)
-		("\\.pyw$" . python-mode)
 		("SConstruct" . python-mode)
 		("SConscript" . python-mode)
 		("\\.clpr.c$" . prolog-mode)
@@ -258,7 +229,6 @@
 		("\\.cl$" . lisp-mode)
 		("\\.ss$" . scheme-mode)
 		("\\.scm$" . scheme-mode)
-		("\\.java$" . java-mode)
 		("\\.erl$" . erlang-mode)
 		) auto-mode-alist))
 
