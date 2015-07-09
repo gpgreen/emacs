@@ -52,6 +52,11 @@
 	"~/go/misc/emacs"
 	"~/lib/erlang/lib/tools-2.6.6.4/emacs")))
 
+;; Magit
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+
 ;; useful function keys
 ;; --------------------
 ;; have a look on /usr/share/emacs/site-lisp/function-keys.el
