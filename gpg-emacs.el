@@ -1,4 +1,4 @@
-;; $Id: .gnu-emacs,v 1.11 2004/09/06 21:03:10 ggreen Exp $
+;; gpg-emacs.el
 
 (display-message-or-buffer "Loading gpg's stuff")
 
@@ -32,6 +32,10 @@
 	"~/emacs"
 	"~/go/misc/emacs"
 	"~/lib/erlang/lib/tools-2.6.6.4/emacs")))
+
+;; Magit
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 ;; useful function keys
 ;; --------------------
@@ -79,12 +83,6 @@
 
 ;;;; FLYCHECK
 (add-hook 'after-init-hook #'global-flycheck-mode)
-
-;;; CEDET
-;; Load CEDET
-;(load-file "~/emacs/cedet-1.0beta3b/common/cedet.el")
-;; Enabling SEMANTIC minor modes. See semantic/INSTALL for more ideas.
-;(semantic-load-enable-code-helpers)
 
 ;; python mode
 (autoload 'python-mode "python-mode" "Python editing mode." t)
@@ -154,14 +152,6 @@
 (eval-after-load 'css-mode
   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
 
-;(require 'jde)
-;(defun gpg-java-mode-hook ()
-  ;; jde
-;  (setq jde-compile-option-command-line-args "-deprecation")
-;  (setq jde-compile-option-debug (quote ("all" (t t t))))
-; (setq jde-global-classpath (quote ("/usr/home1/gpgreen/java:/usr/local/java/postgresql.jar:/usr/local/java/jdk1.1.7/lib/classes.zip:/usr/local/java/junit2.1/junit.jar"))))
-;  (setq jde-jdk-doc-url "file:/usr/java/webdocs/api/packages.html"))
-  
 ;;; GO
 ;; needs go-mode-load.el
 ;; see load-path at top of file
@@ -218,7 +208,6 @@
 
 ;; iswitchb
 (iswitchb-mode 1)
-;(iswitchb-default-keybindings)
 
 ;; gnuserv configuration
 ;(require 'gnuserv)
