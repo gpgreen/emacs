@@ -2,16 +2,6 @@
 
 (display-message-or-buffer "Loading gpg's stuff")
 
-;;; LOCATION SWITCHER MACRO
-;;; macro to switch between different working locations
-;;; first form is at home, second is at work
-;;; If the file "~/.emacs-home" exists, we are at home
-(defmacro switch-location (home work)
-  (list 'if 
-	(file-exists-p "~/.emacs-home")
-	(cons 'progn home)
-	(cons 'progn work)))
-
 ;;;;;
 ;;;;; PACKAGE MANAGER
 (require 'package)
@@ -19,15 +9,6 @@
 	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
-;; Set Font Lock Mode
-(global-font-lock-mode t)
-; maximize font lock mode
-(setq font-lock-mode-maximum-decoration t)
-
-;;; some colors
-(set-face-foreground 'mode-line "red")
-(set-face-background 'mode-line "lemonchiffon")
-(setq transient-mark-mode 't)
 
 ;; default geometry
 (setq default-frame-alist
