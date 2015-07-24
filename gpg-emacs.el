@@ -1,16 +1,6 @@
-;; $Id: .gnu-emacs,v 1.11 2004/09/06 21:03:10 ggreen Exp $
+;; gpg-emacs.el
 
 (display-message-or-buffer "Loading gpg's stuff")
-
-;;; LOCATION SWITCHER MACRO
-;;; macro to switch between different working locations
-;;; first form is at home, second is at work
-;;; If the file "~/.emacs-home" exists, we are at home
-(defmacro switch-location (home work)
-  (list 'if 
-	(file-exists-p "~/.emacs-home")
-	(cons 'progn home)
-	(cons 'progn work)))
 
 ;;;;;
 ;;;;; PACKAGE MANAGER
@@ -19,15 +9,6 @@
 	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
-;; Set Font Lock Mode
-(global-font-lock-mode t)
-; maximize font lock mode
-(setq font-lock-mode-maximum-decoration t)
-
-;;; some colors
-(set-face-foreground 'mode-line "red")
-(set-face-background 'mode-line "lemonchiffon")
-(setq transient-mark-mode 't)
 
 ;; default geometry
 (setq default-frame-alist
@@ -53,7 +34,6 @@
 	"~/lib/erlang/lib/tools-2.6.6.4/emacs")))
 
 ;; Magit
-(require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
@@ -103,12 +83,6 @@
 
 ;;;; FLYCHECK
 (add-hook 'after-init-hook #'global-flycheck-mode)
-
-;;; CEDET
-;; Load CEDET
-;(load-file "~/emacs/cedet-1.0beta3b/common/cedet.el")
-;; Enabling SEMANTIC minor modes. See semantic/INSTALL for more ideas.
-;(semantic-load-enable-code-helpers)
 
 ;; python mode
 (autoload 'python-mode "python-mode" "Python editing mode." t)
@@ -178,14 +152,6 @@
 (eval-after-load 'css-mode
   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
 
-;(require 'jde)
-;(defun gpg-java-mode-hook ()
-  ;; jde
-;  (setq jde-compile-option-command-line-args "-deprecation")
-;  (setq jde-compile-option-debug (quote ("all" (t t t))))
-; (setq jde-global-classpath (quote ("/usr/home1/gpgreen/java:/usr/local/java/postgresql.jar:/usr/local/java/jdk1.1.7/lib/classes.zip:/usr/local/java/junit2.1/junit.jar"))))
-;  (setq jde-jdk-doc-url "file:/usr/java/webdocs/api/packages.html"))
-  
 ;;; GO
 ;; needs go-mode-load.el
 ;; see load-path at top of file
@@ -242,7 +208,6 @@
 
 ;; iswitchb
 (iswitchb-mode 1)
-;(iswitchb-default-keybindings)
 
 ;; gnuserv configuration
 ;(require 'gnuserv)
