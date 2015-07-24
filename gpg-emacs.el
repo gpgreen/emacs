@@ -9,7 +9,6 @@
 	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
-
 ;; default geometry
 (setq default-frame-alist
       '(
@@ -161,21 +160,6 @@
 (add-hook 'c-mode-common-hook 'gpg-c-mode-common-hook)
 (add-hook 'c++-mode-hook 'gpg-c++-mode-hook)
 ;(add-hook 'java-mode-hook 'gpg-java-mode-hook)
-
-;;; LISP
-;; lisp mode hook
-;(require 'ilisp)
-
-(defun gpg-ilisp-load-hook ()
-  ;(setq ilisp-*use-fsf-compliant-keybindings* t)
-  ;;; Configuration of Erik Naggum's HyperSpec access package.
-  (setq common-lisp-hyperspec-root
-	"file:/usr/local/share/lisp/HyperSpec/")
-  ;; CLISP (Bruno Haible and Michael Stoll)
-  (autoload 'clisp-hs   "ilisp" "Inferior Haible/Stoll CLISP Common Lisp." t)
-  (setq clisp-hs-program "clisp -I"))
-;; set the hooks
-;(add-hook 'ilisp-load-hook 'gpg-ilisp-load-hook)
 
 ;; Erlang
 (setq erlang-root-dir "~/lib/erlang")
