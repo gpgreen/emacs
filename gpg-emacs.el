@@ -9,19 +9,8 @@
 	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
-;; default geometry
-(setq default-frame-alist
-      '(
-	(width . 80) (height . 50)
-))
-
 ;; turn on column numbers
 (setq column-number-mode t)
-
-;; Window stuff
-(setq special-display-frame-alist
-      '((height . 15) (width . 81) (unsplittable . nil))
-)
 
 ;; set the path
 (setq load-path 
@@ -128,7 +117,7 @@
   (font-lock-add-keywords 'c++-mode
 			  '(("\\<SIGNAL\\|SLOT\\>" . 'qt-keywords-face)))
   (font-lock-add-keywords 'c++-mode
-			  '(("\\<Q[A-Z][A-Za-z]*" . 'qt-keywords-face)))
+			  '(("\\<Q[A-Z][A-Za-z2-3]*" . 'qt-keywords-face)))
 
   ;; C++ stuff
   ;(load "c++-stuff")
