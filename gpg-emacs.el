@@ -1,27 +1,23 @@
-;; gpg-emacs.el
+;;; gpg-emacs --- Summary
+;; ggreen@gbit-builder.com
+;;
+;;; Commentary:
+;;
+;; Packages we are using that need to be installed with emacs package manager
+;; magit
+;; flycheck
+;; ac-js2
+;; web-beautify
+;; java-imports
+;; ggtags
+;; realgud
+;; use-package
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (display-message-or-buffer "Loading gpg's stuff")
 
-;;;;;
-;;;;; PACKAGE MANAGER
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/") t)
-(package-initialize)
-
-;; default geometry
-(setq default-frame-alist
-      '(
-	(width . 80) (height . 50)
-))
-
 ;; turn on column numbers
 (setq column-number-mode t)
-
-;; Window stuff
-(setq special-display-frame-alist
-      '((height . 15) (width . 81) (unsplittable . nil))
-)
 
 ;; set the path
 (setq load-path 
@@ -102,17 +98,142 @@
 )
 (add-hook 'python-mode-hook 'gpg-python-mode-hook)
 
-;; make C-mode customizations
-(defun gpg-c-mode-common-hook ()
+;n mode
+;; via http://emacs.stackexchange.com/questions/17327/how-to-have-c-offset-style-correctly-detect-a-java-constructor-and-change-indent
+(defun my/point-in-defun-declaration-p ()
+  (let ((bod (save-excursion (c-beginning-of-defun)
+                             (point))))
+    (<= bod
+        (point)
+        (save-excursion (goto-char bod)
+                        (re-search-forward "{")
+                        (point)))))
+
+(defun my/is-string-concatenation-p ()
+  "Returns true if the previous line is a string concatenation"
+  (save-excursion
+    (let ((start (point)))
+      (forward-line -1)
+      (if (re-search-forward " \\\+$" start t) t nil))))
+
+(defun my/inside-java-lambda-p ()
+  "Returns true if point is the first statement inside of a lambda"
+  (save-excursion
+    (c-beginning-of-statement-1)
+    (let ((start (point)))
+      (forward-line -1)
+      (if (search-forward " -> {" start t) t nil))))
+
+(defun my/trailing-paren-p ()
+  "Returns true if point is a training paren and semicolon"
+  (save-excursion
+    (end-of-line)
+    (let ((endpoint (point)))
+      (beginning-of-line)
+      (if (re-search-forward "[ ]*);$" endpoint t) t nil))))
+
+(defun my/prev-line-call-with-no-args-p ()
+  "Return true if the previous line is a function call with no arguments"
+  (save-excursion
+    (let ((start (point)))
+      (forward-line -1)
+      (if (re-search-forward ".($" start t) t nil))))
+
+(defun my/arglist-cont-nonempty-indentation (arg)
+  (if (my/inside-java-lambda-p)
+      '+
+    (if (my/is-string-concatenation-p)
+        16 ;; TODO don't hard-code
+      (unless (my/point-in-defun-declaration-p) '++))))
+
+(defun my/statement-block-intro (arg)
+  (if (and (c-at-statement-start-p) (my/inside-java-lambda-p)) 0 '+))
+
+(defun my/block-close (arg)
+  (if (my/inside-java-lambda-p) '- 0))
+
+(defun my/arglist-close (arg) (if (my/trailing-paren-p) 0 '--))
+
+(defun my/arglist-intro (arg)
+  (if (my/prev-line-call-with-no-args-p) '++ 0))
+
+(defconst intellij-java-style
+  '((c-basic-offset . 4)
+    (c-comment-only-line-offset . (0 . 0))
+    ;; the following preserves Javadoc starter lines
+    (c-offsets-alist
+     .
+     ((inline-open . 0)
+      (topmost-intro-cont    . +)
+      (statement-block-intro . my/statement-block-intro)
+      (block-close           . my/block-close)
+      (knr-argdecl-intro     . +)
+      (substatement-open     . +)
+      (substatement-label    . +)
+      (case-label            . +)
+      (label                 . +)
+      (statement-case-open   . +)
+      (statement-cont        . +)
+      (arglist-intro         . my/arglist-intro)
+      (arglist-cont-nonempty . (my/arglist-cont-nonempty-indentation c-lineup-arglist))
+      (arglist-close         . my/arglist-close)
+      (inexpr-class          . 0)
+      (access-label          . 0)
+      (inher-intro           . ++)
+      (inher-cont            . ++)
+      (brace-list-intro      . +)
+      (func-decl-cont        . ++))))
+  "Elasticsearch's Intellij Java Programming Style")
+
+(c-add-style "intellij" intellij-java-style)
+(customize-set-variable 'c-default-style
+                        '((java-mode . "intellij")
+                          (awk-mode . "awk")
+                          (other . "gnu")))
+
+(defun eos/setup-java ()
+  (interactive)
+  (define-key java-mode-map (kbd "M-,") 'pop-tag-mark)
+  (define-key java-mode-map (kbd "C-c M-i") 'java-imports-add-import-dwim)
+  (c-set-style "intellij" t)
+  (subword-mode 1)
+  (toggle-truncate-lines 1)
+  ;; Generic java stuff things
+  (setq-local fci-rule-column 99)
+  (setq-local fill-column 140)
+  (when (fboundp 'eos/turn-on-whitespace-mode)
+    (whitespace-mode -1)
+    (eos/turn-on-whitespace-mode))
+  ;; remove the stupid company-eclim backend
+  (when (boundp 'company-backends)
+    (setq company-backends (delete 'company-eclim company-backends)))
+  ;; hide the initial comment in the file (usually a license) if hs-minor-mode
+  ;; is enabled
+  (when (boundp' hs-minor-mode)
+    (hs-hide-initial-comment-block)))
+
+(add-hook 'java-mode-hook #'eos/setup-java)
+
+;; Make emacs' compile recognize broken gradle output
+(require 'compile)
+(add-to-list 'compilation-error-regexp-alist
+             '("^:[^/.\n]+\\(/.+\\):\\([[:digit:]]+\\):" 1 2))
+
+(use-package java-imports
+  :ensure t
+  :config
+  ;; Elasticsearch's import style
+  (setq java-imports-find-block-function 'java-imports-find-place-sorted-block)
+  (add-hook 'java-mode-hook 'java-imports-scan-file))
+
+(defun gpg-c++-mode-hook ()
   (c-set-style "stroustrup")
   (c-toggle-auto-hungry-state 1)
   (define-key c-mode-map "\C-m" 'newline-and-indent)
   (define-key c-mode-map [f4] 'speedbar-get-focus)
   (setq c-basic-offset 4)
   (setq tab-width 4)
-  (setq indent-tabs-mode t))
-
-(defun gpg-c++-mode-hook ()
+  (setq indent-tabs-mode nil)
   ;; qt keywords and stuff ...
   ;; set up indenting correctly for new qt kewords (one line)
   (setq c-C++-access-key "\\<\\(signals\\|public\\|protected\\|private\\|public slots\\|protected slots\\|private slots\\)\\>[ \t]*:")
@@ -128,8 +249,9 @@
   (font-lock-add-keywords 'c++-mode
 			  '(("\\<SIGNAL\\|SLOT\\>" . 'qt-keywords-face)))
   (font-lock-add-keywords 'c++-mode
-			  '(("\\<Q[A-Z][A-Za-z]*" . 'qt-keywords-face)))
+			  '(("\\<Q[A-Z][A-Za-z2-3]*" . 'qt-keywords-face)))
 
+  (setq indent-tabs-mode nil)
   ;; C++ stuff
   ;(load "c++-stuff")
 )
@@ -157,7 +279,6 @@
 ;require 'go-mode-load)
 
 ;; set the hooks
-(add-hook 'c-mode-common-hook 'gpg-c-mode-common-hook)
 (add-hook 'c++-mode-hook 'gpg-c++-mode-hook)
 ;(add-hook 'java-mode-hook 'gpg-java-mode-hook)
 
