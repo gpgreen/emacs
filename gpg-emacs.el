@@ -290,6 +290,19 @@
 ;; Tex stuff
 (setq tex-dvi-view-command "xdvi")
 
+;; org-mode
+;; The following lines are always needed.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+;; pamparam
+(require 'pamparam)
+(setq pam-alist
+      '(("/home/ggreen/Documents/Thai/thai.org" . "/home/ggreen/src/thai.pam")))
+(setq pam-path "/home/ggreen/src/thai.pam")
+
 ;; auto-mode stuff
 (setq auto-mode-alist 
       (append '(("\\.h$" . c++-mode)
@@ -317,6 +330,9 @@
 ;; gnuserv configuration
 ;(require 'gnuserv)
 ;(gnuserv-start)
+
+;; pamparam
+(require 'pamparam)
 
 ;;;;;;;;;;
 ;; the end
