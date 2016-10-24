@@ -306,6 +306,7 @@
 		("\\.ss$" . scheme-mode)
 		("\\.scm$" . scheme-mode)
 		("\\.erl$" . erlang-mode)
+;		("\\.gradle$" . groovy-mode)
 		) auto-mode-alist))
 
 ;; printer stuff
