@@ -198,6 +198,7 @@
   (c-set-style "intellij" t)
   (subword-mode 1)
   (toggle-truncate-lines 1)
+  (setq-local indent-tabs-mode nil)
   ;; Generic java stuff things
   (setq-local fci-rule-column 99)
   (setq-local fill-column 140)
@@ -222,7 +223,7 @@
 (use-package java-imports
   :ensure t
   :config
-  ;; Elasticsearch's import style
+ ;; Elasticsearch's import style
   (setq java-imports-find-block-function 'java-imports-find-place-sorted-block)
   (add-hook 'java-mode-hook 'java-imports-scan-file))
 
@@ -296,12 +297,10 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-cy" 'pam-drill)
 
 ;; pamparam
 (require 'pamparam)
-(setq pam-alist
-      '(("/home/ggreen/Documents/Thai/thai.org" . "/home/ggreen/src/thai.pam")))
-(setq pam-path "/home/ggreen/src/thai.pam")
 
 ;; auto-mode stuff
 (setq auto-mode-alist 
@@ -330,9 +329,6 @@
 ;; gnuserv configuration
 ;(require 'gnuserv)
 ;(gnuserv-start)
-
-;; pamparam
-(require 'pamparam)
 
 ;;;;;;;;;;
 ;; the end
