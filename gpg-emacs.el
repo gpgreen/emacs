@@ -4,14 +4,17 @@
 ;;; Commentary:
 ;;
 ;; Packages we are using that need to be installed with emacs package manager
-;; magit
-;; flycheck
-;; ac-js2
-;; web-beautify
-;; java-imports
-;; ggtags
-;; realgud
-;; use-package
+; magit
+; flycheck
+; ac-js2
+; web-beautify
+; java-imports
+; ggtags
+; realgud
+; worf
+; lispy
+; use-package
+; org-bullets
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (display-message-or-buffer "Loading gpg's stuff")
@@ -269,8 +272,8 @@
   '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
 (eval-after-load 'json-mode
   '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
-(eval-after-load 'sgml-mode
-  '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+;(eval-after-load 'sgml-mode
+;  '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
 (eval-after-load 'css-mode
   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
 
@@ -291,13 +294,32 @@
 ;; Tex stuff
 (setq tex-dvi-view-command "xdvi")
 
-;; org-mode
+;;; org-mode
 ;; The following lines are always needed.
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key "\C-cy" 'pam-drill)
+
+;; org-babel setup languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (sh . t)
+   (C . t)
+   (python . t)
+;   (sed . t)
+   (awk . t)
+   (gnuplot . t)
+   (latex . t)
+   (sql . t)
+   (css . t)
+   (js . t)))
+
+;; org-bullets
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; pamparam
 (require 'pamparam)
@@ -330,6 +352,9 @@
 ;; gnuserv configuration
 ;(require 'gnuserv)
 ;(gnuserv-start)
+
+;;; notmuch
+(autoload 'notmuch "notmuch" "Notmuch mail" t)
 
 ;;;;;;;;;;
 ;; the end
