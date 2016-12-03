@@ -1,22 +1,23 @@
 ;;; gpg-emacs --- Summary
+;;
 ;; ggreen@gbit-builder.com
 ;;
 ;;; Commentary:
 ;;
-;; Packages we are using that need to be installed with emacs package manager
-; magit
-; flycheck
-; ac-js2
-; web-beautify
-; java-imports
-; ggtags
-; realgud
-; worf
-; lispy
-; use-package
-; org-plus-contrib
-; org-beautify-theme
-; org-bullets
+;; Packages we are using that need to be installed with Emacs package manager
+;;  ac-js2
+;;  flycheck
+;;  ggtags
+;;  java-imports
+;;  lispy
+;;  magit
+;;  org-beautify-theme
+;;  org-bullets
+;;  org-plus-contrib
+;;  realgud
+;;  use-package
+;;  web-beautify
+;;  worf
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (display-message-or-buffer "Loading gpg's stuff")
@@ -63,7 +64,7 @@
 	    'comint-watch-for-password-prompt)
   (put 'eval-expression 'disabled nil)
   (rename-uniquely)
-  ; win32 bash shell stuff
+; win32 bash shell stuff
   (if (string= system-type "windows-nt")
       (
 ;       (setq comint-scroll-show-maximum-output 'this)
@@ -78,7 +79,7 @@
 (defun gpg-text-mode-hook ()
   (auto-fill-mode 1)
   (setq set-fill-column 70)
-)
+  )
 (add-hook 'text-mode-hook 'gpg-text-mode-hook)
 
 ;;;; FLYCHECK
@@ -100,10 +101,10 @@
 ;  (if (zerop (buffer-size))
 ;      (gpg-python-insert-new-buffer-strings))
   (setq indent-tabs-mode nil)
-)
+  )
 (add-hook 'python-mode-hook 'gpg-python-mode-hook)
 
-;n mode
+					;n mode
 ;; via http://emacs.stackexchange.com/questions/17327/how-to-have-c-offset-style-correctly-detect-a-java-constructor-and-change-indent
 (defun my/point-in-defun-declaration-p ()
   (let ((bod (save-excursion (c-beginning-of-defun)
@@ -228,7 +229,7 @@
 (use-package java-imports
   :ensure t
   :config
- ;; Elasticsearch's import style
+  ;; Elasticsearch's import style
   (setq java-imports-find-block-function 'java-imports-find-place-sorted-block)
   (add-hook 'java-mode-hook 'java-imports-scan-file))
 
@@ -259,8 +260,8 @@
 
   (setq indent-tabs-mode nil)
   ;; C++ stuff
-  ;(load "c++-stuff")
-)
+;(load "c++-stuff")
+  )
 
 ;; javascript
 (defun gpg-js-mode-hook ()
@@ -297,21 +298,15 @@
 (setq tex-dvi-view-command "xdvi")
 
 ;;; org-mode
-;; The following lines are always needed.
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
-(global-set-key "\C-cy" 'pam-drill)
 
 ;; org-babel setup languages
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
-   (sh . t)
+   (shell . t)
    (C . t)
    (python . t)
-;   (sed . t)
+   (sed . t)
    (awk . t)
    (gnuplot . t)
    (latex . t)
