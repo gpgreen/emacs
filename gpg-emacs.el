@@ -14,6 +14,8 @@
 ; worf
 ; lispy
 ; use-package
+; org-plus-contrib
+; org-beautify-theme
 ; org-bullets
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -321,8 +323,9 @@
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-;; pamparam
-(require 'pamparam)
+;; org-drill
+(require 'cl)
+(require 'org-drill)
 
 ;; auto-mode stuff
 (setq auto-mode-alist 
