@@ -6,14 +6,17 @@
 ;;
 ;; Packages we are using that need to be installed with Emacs package manager
 ;;  ac-js2
+;;  dart-mode
 ;;  flycheck
 ;;  ggtags
 ;;  java-imports
 ;;  lispy
 ;;  magit
+;;  ob-dart
 ;;  org-beautify-theme
 ;;  org-bullets
 ;;  org-plus-contrib
+;;  python-mode
 ;;  realgud
 ;;  use-package
 ;;  web-beautify
@@ -91,17 +94,12 @@
 (setq special-display-buffer-names '("*Python*" "*Python Output*"))
 ;; my hook into python-mode
 (defun gpg-python-mode-hook()
-  (load "gpg-python-stuff")
   (load "gpg-python-template")
-  (define-key py-mode-map [f3] 'gpg-python-find-module)
-  (define-key py-mode-map [f4] 'speedbar-get-focus)
   (define-key py-mode-map [f5] 'gpg-python-insert-new-buffer-strings)
-  (define-key py-mode-map [f6] 'gpg-python-run-current-buffer)
   (define-key py-mode-map [f7] 'pdb)
-;  (if (zerop (buffer-size))
-;      (gpg-python-insert-new-buffer-strings))
-  (setq indent-tabs-mode nil)
-  )
+  (if (zerop (buffer-size))
+      (gpg-python-insert-new-buffer-strings))
+  (setq indent-tabs-mode nil))
 (add-hook 'python-mode-hook 'gpg-python-mode-hook)
 
 					;n mode
@@ -287,17 +285,24 @@
 
 ;; set the hooks
 (add-hook 'c++-mode-hook 'gpg-c++-mode-hook)
-;(add-hook 'java-mode-hook 'gpg-java-mode-hook)
 
 ;; Erlang
 (setq erlang-root-dir "~/lib/erlang")
 (setq exec-path (cons "~/bin" exec-path))
 ;(require 'erlang-start)
 
-;; Tex stuff
-(setq tex-dvi-view-command "xdvi")
-
 ;;; org-mode
+(defun org-mode-gpg-setup ()
+  ;; org-bullets
+  (org-bullets-mode 1))
+(add-hook 'org-mode-hook 'org-mode-gpg-setup)
+
+;; org-mobile
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+(setq org-mobile-files
+      (list
+       "index.org"
+       "thai.org"))
 
 ;; org-babel setup languages
 (org-babel-do-load-languages
@@ -312,11 +317,8 @@
    (latex . t)
    (sql . t)
    (css . t)
+   (dart . t)
    (js . t)))
-
-;; org-bullets
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; org-drill
 (require 'cl)
@@ -324,25 +326,10 @@
 
 ;; auto-mode stuff
 (setq auto-mode-alist 
-      (append '(("\\.h$" . c++-mode)
-		("\\.icc$" . c++-mode)
+      (append '(("\\.icc$" . c++-mode)
                 ("\\.mk$" . makefile-mode)
 		("\\.mkd$" . makefile-mode)
-		("akefile" . makefile-mode)
-		("SConstruct" . python-mode)
-		("SConscript" . python-mode)
-		("\\.clpr.c$" . prolog-mode)
-		("\\.lisp$" . lisp-mode)
-		("\\.lsp$" . lisp-mode)
-		("\\.cl$" . lisp-mode)
-		("\\.ss$" . scheme-mode)
-		("\\.scm$" . scheme-mode)
-		("\\.erl$" . erlang-mode)
-;		("\\.gradle$" . groovy-mode)
 		) auto-mode-alist))
-
-;; printer stuff
-(setq lpr-command "lpr")
 
 ;; iswitchb
 (iswitchb-mode 1)
@@ -353,6 +340,9 @@
 
 ;;; notmuch
 (autoload 'notmuch "notmuch" "Notmuch mail" t)
+
+;;; binary diff
+(load "binary-diff")
 
 ;;;;;;;;;;
 ;; the end

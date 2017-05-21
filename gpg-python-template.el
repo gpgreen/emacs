@@ -11,7 +11,7 @@
 (tempo-define-template "gpg-python-skeleton" 
   '("##############################################################################\n"
     "# \n"
-    "# Copyright (c) 2005 Greg Green <ggreen@bit-builder.com>\n"
+    "# Copyright (c) 2017 Greg Green <ggreen@bit-builder.com>\n"
     "# \n"
     "# File: \n"
     "'''\n" (P "Module doc string: ") "\n'''\n"
