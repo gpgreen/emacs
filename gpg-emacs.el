@@ -338,6 +338,7 @@
 ;; auto-mode stuff
 (setq auto-mode-alist 
       (append '(("\\.icc$" . c++-mode)
+		("\\.ino$" . c++-mode)
                 ("\\.mk$" . makefile-mode)
 		("\\.mkd$" . makefile-mode)
 		) auto-mode-alist))
