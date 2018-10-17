@@ -25,6 +25,26 @@
 
 (display-message-or-buffer "Loading gpg's stuff")
 
+;; Load CEDET.
+;; See cedet/common/cedet.info for configuration details.
+;; IMPORTANT: Tou must place this *before* any CEDET component
+;; gets activated by another package (Gnus, auth-source, ...).
+(load-file "/home/ggreen/src/cedet/cedet-devel-load.el")
+(load-file "/home/ggreen/src/cedet/contrib/cedet-contrib-load.el")
+
+;; Add further minor-modes to be enabled by semantic-mode.
+;; See doc-string of `semantic-default-submodes' for other things
+;; you can use here.
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+(add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+
+;; Enable Semantic
+(semantic-mode 1)
+
+;; Enable EDE (Project Management) features
+(global-ede-mode 1)
+
 ;; turn on column numbers
 (setq column-number-mode t)
 
@@ -193,7 +213,7 @@
 (customize-set-variable 'c-default-style
                         '((java-mode . "intellij")
                           (awk-mode . "awk")
-                          (other . "gnu")))
+                          (other . "linux")))
 
 (defun eos/setup-java ()
   (interactive)
@@ -231,35 +251,29 @@
   (setq java-imports-find-block-function 'java-imports-find-place-sorted-block)
   (add-hook 'java-mode-hook 'java-imports-scan-file))
 
-(defun gpg-c++-mode-hook ()
-  (c-set-style "stroustrup")
+;; c-mode
+;;
+(defun gpg-c-mode-hook ()
+  (c-set-style "stroustrup" t)
   (c-toggle-auto-hungry-state 1)
   (define-key c-mode-map "\C-m" 'newline-and-indent)
   (define-key c-mode-map [f4] 'speedbar-get-focus)
   (setq c-basic-offset 4)
   (setq tab-width 4)
-  (setq indent-tabs-mode nil)
-  ;; qt keywords and stuff ...
-  ;; set up indenting correctly for new qt kewords (one line)
-  (setq c-C++-access-key "\\<\\(signals\\|public\\|protected\\|private\\|public slots\\|protected slots\\|private slots\\)\\>[ \t]*:")
-  ;; modify the colour of slots to match public, private, etc ...
-  (font-lock-add-keywords 'c++-mode
-			  '(("\\<\\(slots\\|signals\\)\\>" . font-lock-type-face)))
-  ;; make new font for rest of qt keywords
-  (make-face 'qt-keywords-face)
-  (set-face-foreground 'qt-keywords-face "deeppink2")
-  ;; qt keywords
-  (font-lock-add-keywords 'c++-mode
-			  '(("\\<Q_OBJECT\\>" . 'qt-keywords-face)))
-  (font-lock-add-keywords 'c++-mode
-			  '(("\\<SIGNAL\\|SLOT\\>" . 'qt-keywords-face)))
-  (font-lock-add-keywords 'c++-mode
-			  '(("\\<Q[A-Z][A-Za-z2-3]*" . 'qt-keywords-face)))
+  (setq indent-tabs-mode nil))
+(add-hook 'c-mode-hook 'gpg-c-mode-hook)
 
-  (setq indent-tabs-mode nil)
-  ;; C++ stuff
-;(load "c++-stuff")
-  )
+;; c++-mode
+;;
+(defun gpg-c++-mode-hook ()
+  (c-set-style "stroustrup" t)
+  (c-toggle-auto-hungry-state 1)
+  (define-key c-mode-map "\C-m" 'newline-and-indent)
+  (define-key c-mode-map [f4] 'speedbar-get-focus)
+  (setq c-basic-offset 4)
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil))
+(add-hook 'c++-mode-hook 'gpg-c++-mode-hook)
 
 ;; javascript
 (defun gpg-js-mode-hook ()
@@ -282,9 +296,6 @@
 ;; needs go-mode-load.el
 ;; see load-path at top of file
 ;require 'go-mode-load)
-
-;; set the hooks
-(add-hook 'c++-mode-hook 'gpg-c++-mode-hook)
 
 ;; Erlang
 (setq erlang-root-dir "~/lib/erlang")
