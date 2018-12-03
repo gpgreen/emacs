@@ -387,6 +387,68 @@
 		("\\.mkd$" . makefile-mode)
 		) auto-mode-alist))
 
+;;; functions to switch fonts
+
+(defvar xah-font-list nil "A list of fonts for `xah-cycle-font' to cycle from.")
+(setq xah-font-list
+      (cond
+       ((string-equal system-type "windows-nt")
+        '(
+          "Courier-10"
+          "Lucida Console-10"
+          "Segoe UI Symbol-12"
+          "Lucida Sans Unicode-10"
+          ))
+       ((string-equal system-type "gnu/linux")
+        '(
+          "Ubuntu Mono-13"
+	  "DejaVu Sans Mono-10"
+          "Phetsarath OT-13"
+	  "Source Code Pro Medium-11"
+          ))
+       ((string-equal system-type "darwin") ; Mac
+        '("Courier-14"
+          "Menlo-14"))))
+
+;; switch fonts from list xah-font-list
+(defun xah-cycle-font (@n)
+  "Change font in current frame.
+Each time this is called, font cycles thru a predefined list of fonts in the variable `xah-font-list' .
+If @n is 1, cycle forward.
+If @n is -1, cycle backward.
+See also `xah-cycle-font-next', `xah-cycle-font-previous'.
+
+URL `http://ergoemacs.org/emacs/emacs_switching_fonts.html'
+Version 2015-09-21"
+  (interactive "p")
+  ;; this function sets a property “state”. It is a integer. Possible values are any index to the fontList.
+  (let ($fontToUse $stateBefore $stateAfter )
+    (setq $stateBefore (if (get 'xah-cycle-font 'state) (get 'xah-cycle-font 'state) 0))
+    (setq $stateAfter (% (+ $stateBefore (length xah-font-list) @n) (length xah-font-list)))
+    (setq $fontToUse (nth $stateAfter xah-font-list))
+    (set-frame-font $fontToUse t)
+    ;; (set-frame-parameter nil 'font $fontToUse)
+    (message "Current font is: %s" $fontToUse )
+    (put 'xah-cycle-font 'state $stateAfter)))
+
+;; to next font
+(defun xah-cycle-font-next ()
+  "Switch to the next font, in current window.
+See `xah-cycle-font'."
+  (interactive)
+  (xah-cycle-font 1))
+
+;; to previous font
+(defun xah-cycle-font-previous ()
+  "Switch to the previous font, in current window.
+See `xah-cycle-font'."
+  (interactive)
+  (xah-cycle-font -1))
+
+;; set the keys for switching fonts
+(global-set-key (kbd "<C-f7>") 'xah-cycle-font-next)
+(global-set-key (kbd "<C-f8>") 'xah-cycle-font-previous)
+
 ;; iswitchb
 (iswitchb-mode 1)
 
