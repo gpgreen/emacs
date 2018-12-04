@@ -402,9 +402,9 @@
        ((string-equal system-type "gnu/linux")
         '(
           "Ubuntu Mono-13"
-	  "DejaVu Sans Mono-10"
-          "Phetsarath OT-13"
 	  "Source Code Pro Medium-11"
+	  "DejaVu Sans Mono-10"
+          "Garuda-16"
           ))
        ((string-equal system-type "darwin") ; Mac
         '("Courier-14"
@@ -465,16 +465,15 @@ See `xah-cycle-font'."
 ;; EDE
 (ede-cpp-root-project "AHRS"
                 :name "Attitude Heading Reference Firmware"
-                :file "~/src/avfirmware/ahrs/ahrs.c"
+                :file "~/src/avfirmware/ahrs/globals.h"
                 :include-path '("/"
-                                "/../libs/avr_drivers/drivers"
-                                "/../libs/avr_drivers/utils"
-                                "/../libs/avr_drivers/i2cmaster"
-                                "/../libs/libcanard"
+                                "~/src/avfirmware/libs/avr_drivers/drivers"
+                                "~/src/avfirmware/libs/avr_drivers/utils"
+                                "~/src/avfirmware/libs/avr_drivers/i2cmaster"
+                                "~/src/avfirmware/libs/libcanard"
                                )
-                :system-include-path '("/usr/include")
-                :spp-table '(("isUnix" . "")
-                             ("BOOST_TEST_DYN_LINK" . "")))
+                :system-include-path '("/usr/lib/avr/include")
+                :spp-table '(("F_CPU" . "8000000UL")))
 
 ;;;;;;;;;;
 ;; the end
