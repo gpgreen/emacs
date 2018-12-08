@@ -6,24 +6,38 @@
 ;;
 ;; Packages we are using that need to be installed with Emacs package manager
 ;;  ac-js2
+;;  cargo
+;;  company
+;;  company-racer
 ;;  dart-mode
 ;;  flycheck
+;;  flycheck-rust
 ;;  ggtags
 ;;  java-imports
 ;;  lispy
 ;;  magit
 ;;  ob-dart
+;;  ob-rust
 ;;  org-beautify-theme
 ;;  org-bullets
 ;;  org-plus-contrib
 ;;  python-mode
+;;  racer
 ;;  realgud
+;;  rust-mode
 ;;  use-package
 ;;  web-beautify
 ;;  worf
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (display-message-or-buffer "Loading gpg's stuff")
+
+;; set the path
+(add-to-list 'load-path "~/emacs")
+
+;; setup 'use-package', this will lazy load packages when used
+(eval-when-compile
+  (require 'use-package))
 
 ;; Load CEDET.
 ;; See cedet/common/cedet.info for configuration details.
@@ -98,9 +112,6 @@
 (global-ede-mode 1)
 ;(ede-enable-generic-projects)
 
-;; set the path
-(add-to-list 'load-path "~/emacs")
-
 ;; Magit
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
@@ -121,8 +132,6 @@
 (load "paren")
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
-
-;(load "random_back")
 
 ;; Shell stuff
 (defun gpg-shell-setup ()
@@ -158,101 +167,13 @@
 (setq special-display-buffer-names '("*Python*" "*Python Output*"))
 ;; my hook into python-mode
 (defun gpg-python-mode-hook()
-  (load "gpg-python-template")
-  (define-key py-mode-map [f5] 'gpg-python-insert-new-buffer-strings)
   (define-key py-mode-map [f7] 'pdb)
   (if (zerop (buffer-size))
       (gpg-python-insert-new-buffer-strings))
   (setq indent-tabs-mode nil))
 (add-hook 'python-mode-hook 'gpg-python-mode-hook)
 
-					;n mode
-;; via http://emacs.stackexchange.com/questions/17327/how-to-have-c-offset-style-correctly-detect-a-java-constructor-and-change-indent
-(defun my/point-in-defun-declaration-p ()
-  (let ((bod (save-excursion (c-beginning-of-defun)
-                             (point))))
-    (<= bod
-        (point)
-        (save-excursion (goto-char bod)
-                        (re-search-forward "{")
-                        (point)))))
-
-(defun my/is-string-concatenation-p ()
-  "Returns true if the previous line is a string concatenation"
-  (save-excursion
-    (let ((start (point)))
-      (forward-line -1)
-      (if (re-search-forward " \\\+$" start t) t nil))))
-
-(defun my/inside-java-lambda-p ()
-  "Returns true if point is the first statement inside of a lambda"
-  (save-excursion
-    (c-beginning-of-statement-1)
-    (let ((start (point)))
-      (forward-line -1)
-      (if (search-forward " -> {" start t) t nil))))
-
-(defun my/trailing-paren-p ()
-  "Returns true if point is a training paren and semicolon"
-  (save-excursion
-    (end-of-line)
-    (let ((endpoint (point)))
-      (beginning-of-line)
-      (if (re-search-forward "[ ]*);$" endpoint t) t nil))))
-
-(defun my/prev-line-call-with-no-args-p ()
-  "Return true if the previous line is a function call with no arguments"
-  (save-excursion
-    (let ((start (point)))
-      (forward-line -1)
-      (if (re-search-forward ".($" start t) t nil))))
-
-(defun my/arglist-cont-nonempty-indentation (arg)
-  (if (my/inside-java-lambda-p)
-      '+
-    (if (my/is-string-concatenation-p)
-        16 ;; TODO don't hard-code
-      (unless (my/point-in-defun-declaration-p) '++))))
-
-(defun my/statement-block-intro (arg)
-  (if (and (c-at-statement-start-p) (my/inside-java-lambda-p)) 0 '+))
-
-(defun my/block-close (arg)
-  (if (my/inside-java-lambda-p) '- 0))
-
-(defun my/arglist-close (arg) (if (my/trailing-paren-p) 0 '--))
-
-(defun my/arglist-intro (arg)
-  (if (my/prev-line-call-with-no-args-p) '++ 0))
-
-(defconst intellij-java-style
-  '((c-basic-offset . 4)
-    (c-comment-only-line-offset . (0 . 0))
-    ;; the following preserves Javadoc starter lines
-    (c-offsets-alist
-     .
-     ((inline-open . 0)
-      (topmost-intro-cont    . +)
-      (statement-block-intro . my/statement-block-intro)
-      (block-close           . my/block-close)
-      (knr-argdecl-intro     . +)
-      (substatement-open     . +)
-      (substatement-label    . +)
-      (case-label            . +)
-      (label                 . +)
-      (statement-case-open   . +)
-      (statement-cont        . +)
-      (arglist-intro         . my/arglist-intro)
-      (arglist-cont-nonempty . (my/arglist-cont-nonempty-indentation c-lineup-arglist))
-      (arglist-close         . my/arglist-close)
-      (inexpr-class          . 0)
-      (access-label          . 0)
-      (inher-intro           . ++)
-      (inher-cont            . ++)
-      (brace-list-intro      . +)
-      (func-decl-cont        . ++))))
-  "Elasticsearch's Intellij Java Programming Style")
-
+(require 'intellij-java-style)
 (c-add-style "intellij" intellij-java-style)
 (customize-set-variable 'c-default-style
                         '((java-mode . "intellij")
@@ -336,28 +257,28 @@
 (eval-after-load 'css-mode
   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
 
-;;; GO
-;; needs go-mode-load.el
-;; see load-path at top of file
-;require 'go-mode-load)
-
 ;; Erlang
 (setq erlang-root-dir "~/lib/erlang")
 (setq exec-path (cons "~/bin" exec-path))
 ;(require 'erlang-start)
+
+;;; Rust
+(use-package rust-mode
+  :mode "\\.rs\\'"
+  :init
+  (setq racer-cmd "~/.cargo/bin/racer")
+  (setq racer-rust-src-path "/home/ggreen/src/rust/src")
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'rust-mode-hook #'cargo-minor-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 ;;; org-mode
 (defun org-mode-gpg-setup ()
   ;; org-bullets
   (org-bullets-mode 1))
 (add-hook 'org-mode-hook 'org-mode-gpg-setup)
-
-;; org-mobile
-(setq org-mobile-directory "~/Dropbox/MobileOrg")
-(setq org-mobile-files
-      (list
-       "index.org"
-       "thai.org"))
 
 ;; org-babel setup languages
 (org-babel-do-load-languages
@@ -387,67 +308,10 @@
 		("\\.mkd$" . makefile-mode)
 		) auto-mode-alist))
 
-;;; functions to switch fonts
-
-(defvar xah-font-list nil "A list of fonts for `xah-cycle-font' to cycle from.")
-(setq xah-font-list
-      (cond
-       ((string-equal system-type "windows-nt")
-        '(
-          "Courier-10"
-          "Lucida Console-10"
-          "Segoe UI Symbol-12"
-          "Lucida Sans Unicode-10"
-          ))
-       ((string-equal system-type "gnu/linux")
-        '(
-          "Ubuntu Mono-13"
-	  "Source Code Pro Medium-11"
-	  "DejaVu Sans Mono-10"
-          "Garuda-16"
-          ))
-       ((string-equal system-type "darwin") ; Mac
-        '("Courier-14"
-          "Menlo-14"))))
-
-;; switch fonts from list xah-font-list
-(defun xah-cycle-font (@n)
-  "Change font in current frame.
-Each time this is called, font cycles thru a predefined list of fonts in the variable `xah-font-list' .
-If @n is 1, cycle forward.
-If @n is -1, cycle backward.
-See also `xah-cycle-font-next', `xah-cycle-font-previous'.
-
-URL `http://ergoemacs.org/emacs/emacs_switching_fonts.html'
-Version 2015-09-21"
-  (interactive "p")
-  ;; this function sets a property “state”. It is a integer. Possible values are any index to the fontList.
-  (let ($fontToUse $stateBefore $stateAfter )
-    (setq $stateBefore (if (get 'xah-cycle-font 'state) (get 'xah-cycle-font 'state) 0))
-    (setq $stateAfter (% (+ $stateBefore (length xah-font-list) @n) (length xah-font-list)))
-    (setq $fontToUse (nth $stateAfter xah-font-list))
-    (set-frame-font $fontToUse t)
-    ;; (set-frame-parameter nil 'font $fontToUse)
-    (message "Current font is: %s" $fontToUse )
-    (put 'xah-cycle-font 'state $stateAfter)))
-
-;; to next font
-(defun xah-cycle-font-next ()
-  "Switch to the next font, in current window.
-See `xah-cycle-font'."
-  (interactive)
-  (xah-cycle-font 1))
-
-;; to previous font
-(defun xah-cycle-font-previous ()
-  "Switch to the previous font, in current window.
-See `xah-cycle-font'."
-  (interactive)
-  (xah-cycle-font -1))
-
+(require 'font-switching)
 ;; set the keys for switching fonts
-(global-set-key (kbd "<C-f7>") 'xah-cycle-font-next)
-(global-set-key (kbd "<C-f8>") 'xah-cycle-font-previous)
+(global-set-key (kbd "<C-f8>") 'font-switching-cycle-font-next)
+(global-set-key (kbd "<C-f7>") 'font-switching-cycle-font-prev)
 
 ;; iswitchb
 (iswitchb-mode 1)
@@ -462,18 +326,9 @@ See `xah-cycle-font'."
 ;;; binary diff
 (load "binary-diff")
 
-;; EDE
-(ede-cpp-root-project "AHRS"
-                :name "Attitude Heading Reference Firmware"
-                :file "~/src/avfirmware/ahrs/globals.h"
-                :include-path '("/"
-                                "~/src/avfirmware/libs/avr_drivers/drivers"
-                                "~/src/avfirmware/libs/avr_drivers/utils"
-                                "~/src/avfirmware/libs/avr_drivers/i2cmaster"
-                                "~/src/avfirmware/libs/libcanard"
-                               )
-                :system-include-path '("/usr/lib/avr/include")
-                :spp-table '(("F_CPU" . "8000000UL")))
+;; EDE projects
+(if (file-readable-p "~/emacs/ede-projects.el")
+    (load "~/emacs/ede-projects.el"))
 
 ;;;;;;;;;;
 ;; the end
