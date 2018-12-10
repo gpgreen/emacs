@@ -161,6 +161,10 @@
 ;;;; FLYCHECK
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+;;; Global
+(use-package global
+  :hook (c-mode c++-mode java-mode))
+
 ;; python mode
 (autoload 'python-mode "python-mode" "Python editing mode." t)
 ;; put python output into a separate frame (for stability reasons)
@@ -184,6 +188,7 @@
   (interactive)
   (define-key java-mode-map (kbd "M-,") 'pop-tag-mark)
   (define-key java-mode-map (kbd "C-c M-i") 'java-imports-add-import-dwim)
+  (ggtags-mode 1)
   (c-set-style "intellij" t)
   (subword-mode 1)
   (toggle-truncate-lines 1)
@@ -219,6 +224,7 @@
 ;; c-mode
 ;;
 (defun gpg-c-mode-hook ()
+  (ggtags-mode 1)
   (c-set-style "stroustrup" t)
   (c-toggle-auto-hungry-state 1)
   (define-key c-mode-map "\C-m" 'newline-and-indent)
@@ -231,6 +237,7 @@
 ;; c++-mode
 ;;
 (defun gpg-c++-mode-hook ()
+  (ggtags-mode 1)
   (c-set-style "stroustrup" t)
   (c-toggle-auto-hungry-state 1)
   (define-key c-mode-map "\C-m" 'newline-and-indent)
@@ -311,7 +318,7 @@
 (require 'font-switching)
 ;; set the keys for switching fonts
 (global-set-key (kbd "<C-f8>") 'font-switching-cycle-font-next)
-(global-set-key (kbd "<C-f7>") 'font-switching-cycle-font-prev)
+(global-set-key (kbd "<C-f7>") 'font-switching-cycle-font-previous)
 
 ;; iswitchb
 (iswitchb-mode 1)
