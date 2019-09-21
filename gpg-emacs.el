@@ -28,6 +28,13 @@
 ;;  use-package
 ;;  web-beautify
 ;;  worf
+;;
+;; Need cedet installed separately
+;;  on windows use:
+;;  unzip cedet.zip somewhere
+;;  execute build:
+;;    cd cedet-1.0pre6
+;;    emacs -Q -l cedet-build.el -f cedet-build
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (display-message-or-buffer "Loading gpg's stuff")
@@ -43,7 +50,12 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; IMPORTANT: Tou must place this *before* any CEDET component
 ;; gets activated by another package (Gnus, auth-source, ...).
-(setq cedet-root-path (file-name-as-directory "~/src/cedet/"))
+(setq cedet-root-path
+      (cond
+       ((string-equal system-type "windows-nt")
+	(file-name-as-directory "c:/src/cedet/"))
+       ((string-equal system-type "gnu/linux")
+	(file-name-as-directory "~/src/cedet/"))))
 (load-file (concat cedet-root-path "cedet-devel-load.el"))
 (load-file (concat cedet-root-path "contrib/cedet-contrib-load.el"))
 
