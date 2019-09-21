@@ -284,6 +284,7 @@
 ;;; org-mode
 (defun org-mode-gpg-setup ()
   ;; org-bullets
+  (setq org-use-property-inheritance t)
   (org-bullets-mode 1))
 (add-hook 'org-mode-hook 'org-mode-gpg-setup)
 
@@ -336,6 +337,10 @@
 ;; EDE projects
 (if (file-readable-p "~/emacs/ede-projects.el")
     (load "~/emacs/ede-projects.el"))
+
+;;; beancount
+(use-package beancount)
+(add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
 
 ;;;;;;;;;;
 ;; the end
