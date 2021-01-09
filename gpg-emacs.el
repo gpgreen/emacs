@@ -5,21 +5,18 @@
 ;;; Commentary:
 ;;
 ;; Packages we are using that need to be installed with Emacs package manager
-;;  ac-js2
 ;;  cargo
 ;;  company
-;;  company-racer
 ;;  dart-mode
+;;  dart-server
 ;;  flycheck
 ;;  flycheck-rust
 ;;  ggtags
-;;  java-imports
-;;  lispy
 ;;  magit
-;;  ob-dart
-;;  ob-rust
+;;  org
 ;;  org-beautify-theme
 ;;  org-bullets
+;;  org-drill
 ;;  org-plus-contrib
 ;;  python-mode
 ;;  racer
@@ -27,7 +24,6 @@
 ;;  rust-mode
 ;;  use-package
 ;;  web-beautify
-;;  worf
 ;;
 ;; Need cedet installed separately
 ;;  on windows use:
@@ -93,7 +89,9 @@
 (add-hook 'text-mode-hook 'gpg-text-mode-hook)
 
 ;;;; FLYCHECK
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 
 ;;; Global
 (use-package global
@@ -102,10 +100,10 @@
 ;; python mode
 (autoload 'python-mode "python-mode" "Python editing mode." t)
 ;; put python output into a separate frame (for stability reasons)
-(setq special-display-buffer-names '("*Python*" "*Python Output*"))
+(setq special-display-buffer-names '("*Python*" "*Python Output*" "*Python3*"))
 ;; my hook into python-mode
 (defun gpg-python-mode-hook()
-  (define-key py-mode-map [f7] 'pdb)
+  (define-key python-mode-map (kbd "<f7>") 'pdb)
   (if (zerop (buffer-size))
       (gpg-python-insert-new-buffer-strings))
   (setq indent-tabs-mode nil))
@@ -235,7 +233,6 @@
    (latex . t)
    (sql . t)
    (css . t)
-   (dart . t)
    (js . t)))
 
 ;; org-drill
@@ -264,6 +261,17 @@
 
 ;;; notmuch
 (autoload 'notmuch "notmuch" "Notmuch mail" t)
+(setq message-sendmail-extra-arguments '("--read-envelope-from"))
+;; otherwise it tries to send through OS associated mail client
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+;; we substitute sendmail with msmtp
+(setq sendmail-program "msmtp")
+;;need to tell msmtp which account we're using
+(setq message-sendmail-extra-arguments '("-a" "eskimo"))
+;; you might want to set the following too
+(setq mail-host-address "bit-builder.com")
+(setq user-full-name "Greg Green")
+(setq user-mail-address "ggreen@bit-builder.com")
 
 ;;; binary diff
 (load "binary-diff")
