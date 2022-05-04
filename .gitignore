@@ -3,3 +3,10 @@
 auto-save-list/
 elpa/
 straight/
+comint-history/
+ido.last
+recentf
+tramp
+transient/
+.lsp-session-v1
+projectile-bookmarks.eld
