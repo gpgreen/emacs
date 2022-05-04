@@ -1,4 +1,5 @@
-# .gitignore
-*.elc
+*#
 *~
-.directory
+auto-save-list/
+elpa/
+straight/
