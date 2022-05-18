@@ -88,4 +88,18 @@
 
 (use-package toml-mode)
 
+(use-package cc-mode
+  :config
+  (add-hook 'c-mode-common-hook
+            '(lambda ()
+               (c-toggle-auto-hungry-state 1)
+               (setq c-basic-offset 4)
+               (setq tab-width 4)))
+  (add-hook 'c-mode-hook
+            '(lambda ()
+               (c-set-style "stroustrup")))
+  (add-hook 'c++-mode-hook
+            '(lambda ()
+               (c-set-style "stroustrup"))))
+
 (provide 'init-common)
