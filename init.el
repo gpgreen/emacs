@@ -58,6 +58,7 @@
 (require 'init-projectile)
 (require 'init-realgud)
 (require 'init-rust-mode)
+(require 'init-scad-mode)
 (require 'init-shx)
 (require 'init-themes)
 (require 'init-treemacs)
