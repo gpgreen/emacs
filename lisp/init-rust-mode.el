@@ -18,6 +18,7 @@
   (lsp-eldoc-render-all t)
   (lsp-idle-delay 0.6)
   :config
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.embuild\\'")
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package lsp-ui
