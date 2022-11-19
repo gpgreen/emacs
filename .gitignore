@@ -2,7 +2,8 @@
 *~
 auto-save-list/
 elpa/
-straight/
+straight/build*
+straight/repos/
 comint-history/
 ido.last
 recentf
