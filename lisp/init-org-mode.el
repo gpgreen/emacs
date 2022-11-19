@@ -87,7 +87,6 @@
   (setq cfw:org-overwrite-default-keybinding t))
 
 (use-package org-roam
-      :ensure t
       :after org
       :init  (setq org-roam-v2-ack t)
       :custom

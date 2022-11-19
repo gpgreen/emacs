@@ -10,7 +10,6 @@
   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
 (use-package lsp-mode
-  :ensure
   :commands lsp
   :custom
   ;; what to use when checking on-save. #"check" is default, I use clippy
@@ -22,7 +21,6 @@
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package lsp-ui
-  :ensure
   :commands lsp-ui-mode
   :custom
   (lsp-ui-peek-always-show t)

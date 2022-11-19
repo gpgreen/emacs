@@ -14,7 +14,6 @@
 
 ;; http://company-mode.github.io/
 (use-package company
-  :ensure
   :bind
   (:map company-active-map
         ("C-n". company-select-next)
