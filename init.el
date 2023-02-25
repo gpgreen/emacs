@@ -64,3 +64,4 @@
 (require 'init-treemacs)
 (require 'init-web-mode)
 (require 'init-yasnippet)
+(require 'init-slime)
