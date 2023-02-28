@@ -9,6 +9,9 @@
 (setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/saves" t)))
 
+;; start the emacsclient server
+(server-mode 1)
+
 ;; emacs package linter
 (use-package package-lint)
 
