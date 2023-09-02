@@ -19,6 +19,7 @@
 ;(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 ;(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 
+;; Setup straight package manager, this installs the manager on first time run
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -32,18 +33,21 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; install use-package
 (straight-use-package 'use-package)
 
-(eval-when-compile
-  (require 'use-package))
+;; configure use-package to use straight.el by default
+(use-package straight
+  :custom
+  (straight-use-package-by-default t))
 
 (setq use-package-always-ensure t)
 (setq use-package-verbose t)
-(setq straight-use-package-by-default t)
 
-
+;; where to find all the init file lisp code
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; load up all the init file code
 (require 'init-ui-customizations)
 (require 'init-beancount)
 (require 'init-common)
