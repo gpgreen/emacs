@@ -9,6 +9,8 @@ ido.last
 recentf
 tramp
 transient/
+image-dired/
+persist/
 .lsp-session-v1
 projectile-bookmarks.eld
 session*
@@ -16,3 +18,5 @@ bookmarks
 org-roam.db
 projectile.cache
 .org-id-locations
+fontaine-latest-state.eld
+network-security.data
