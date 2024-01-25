@@ -62,8 +62,8 @@ See `font-switching-cycle-font'."
   (font-switching-cycle-font -1))
 
 ;; now provide some keys
-(global-set-key (kbd "C-<f8>") 'font-switching-cycle-font-next)
-(global-set-key (kbd "C-<f7>") 'font-switching-cycle-font-previous)
+(global-set-key (kbd "C-x <f8>") 'font-switching-cycle-font-next)
+(global-set-key (kbd "C-x <f7>") 'font-switching-cycle-font-previous)
 
 (provide 'init-font-switching)
 

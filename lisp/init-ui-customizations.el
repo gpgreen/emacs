@@ -15,14 +15,17 @@
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
+;; ask for 'y' or 'n' instead of the long form
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; (set-face-attribute 'default nil
-;;                     :family "Hack" :height 130 :weight 'normal)
-(set-face-attribute 'default nil
-                     :family "Source Code Pro" :height 130 :weight 'normal)
+;; show parenthesis
+(use-package paren
+  :init
+  (show-paren-mode t)
+  (setq show-paren-style 'mixed))
 
 ;; https://github.com/Malabarba/beacon
+;; Whenever the window scrolls a light will shine on top of your cursor so you know where it is
 (use-package beacon
   :config
   (beacon-mode 1))
@@ -31,6 +34,9 @@
 ;;   :config
 ;;   (global-page-break-lines-mode))
 
+;; spruces up modes with icons
+;; icon packages must be installed using
+;; M-x all-the-icons-install-fonts
 (use-package all-the-icons)
 
 ;; add useful stuff to opening emacs buffer

@@ -2,7 +2,8 @@
   :config
   (add-hook 'scad-mode-hook
             '(lambda ()
-               (setq tab-width 4)
-               (c-set-style "k&r"))))
+               (c-toggle-auto-hungry-state 1)
+               (setq c-basic-offset 4)
+               (c-set-style "stroustrup"))))
 
 (provide 'init-scad-mode)

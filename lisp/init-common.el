@@ -1,8 +1,16 @@
+;;; package --- My emacs configuration
+
+;;; Commentary: This is the customizations that are common to all modes
+
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'set-goal-column 'disabled nil)
+
+;; make sure indenting doesn't add tabs
 (setq-default indent-tabs-mode nil)
+
+;; on saving, delete trailing whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Garbage autosave and backup files
@@ -49,12 +57,6 @@
 (use-package ido
   :init
   (ido-mode t))
-
-;; show parenthesis
-(use-package paren
-  :init
-  (show-paren-mode t)
-  (setq show-paren-style 'mixed))
 
 ;; define the word at point without a browser
 (use-package define-word

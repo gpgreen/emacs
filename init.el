@@ -48,15 +48,15 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; load up all the init file code
-(require 'init-ui-customizations)
-(require 'init-beancount)
 (require 'init-common)
+(require 'init-beancount)
+(require 'init-fontaine)
 (require 'init-font-switching)
 (require 'init-js)
 (require 'init-magit)
 (require 'init-markdown)
-(require 'init-nov)
 (require 'init-notmuch)
+(require 'init-nov)
 (require 'init-org-mode)
 (require 'init-proced)
 (require 'init-projectile)
@@ -64,8 +64,36 @@
 (require 'init-rust-mode)
 (require 'init-scad-mode)
 (require 'init-shx)
+(require 'init-slime)
 (require 'init-themes)
 (require 'init-treemacs)
+;(require 'init-treesitter)
+(require 'init-ui-customizations)
 (require 'init-web-mode)
 (require 'init-yasnippet)
-(require 'init-slime)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(notmuch-saved-searches
+   '((:name "inbox" :query "tag:inbox" :key
+            [105])
+     (:name "unread" :query "tag:unread" :key
+            [117])
+     (:name "flagged" :query "tag:flagged" :key
+            [102])
+     (:name "sent" :query "tag:sent" :key
+            [116])
+     (:name "drafts" :query "tag:draft" :key
+            [100])
+     (:name "all mail" :query "*" :key
+            [97])))
+ '(smtpmail-smtp-server "mail.eskimo.com")
+ '(smtpmail-smtp-service 587))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
