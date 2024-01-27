@@ -30,8 +30,8 @@
 (use-package notmuch
   :config
   ;; tag changes when replying
-  (setq notmuch-message-replied-tags '(\"+replied\" \"-inbox\"))
-  (setq notmuch-message-forwarded-tags '(\"+forwarded\" \"-inbox\"))
+  (setq notmuch-message-replied-tags '("+replied" "-inbox"))
+  (setq notmuch-message-forwarded-tags '("+forwarded" "-inbox"))
   ;; you might want to set the following too
   (setq mail-host-address "bit-builder.com")
   (setq user-full-name "Greg Green")
