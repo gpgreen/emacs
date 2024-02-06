@@ -89,8 +89,6 @@
             [100])
      (:name "all mail" :query "*" :key
             [97])))
- '(smtpmail-smtp-server "mail.eskimo.com")
- '(smtpmail-smtp-service 587))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

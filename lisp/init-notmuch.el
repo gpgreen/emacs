@@ -36,19 +36,19 @@
   (setq mail-host-address "bit-builder.com")
   (setq user-full-name "Greg Green")
   (setq user-mail-address "ggreen@bit-builder.com")
-  ;; messages with Fcc headers, save via my handler
-  (setq message-fcc-handler-function 'ggreen-message-fcc-handler)
   ;; save sent mail in maildir
   (setq mail-archive-file-name "/home/ggreen/Mail/sent/cur")
-  (add-hook 'message-send-hook 'local-gnus-compose-mode)
+  ;; messages with Fcc headers, save via my handler
+  (setq message-fcc-handler-function 'ggreen-message-fcc-handler)
+  ;; (add-hook 'message-send-hook 'local-gnus-compose-mode)
   (add-hook 'message-send-hook 'ggreen-notmuch-mua-empty-subject-check)
-:init
+  :init
   (setq send-mail-function 'smtpmail-send-it)
-  (setq smtpmail-smtp-server "mail.eskimo.com"
-;;        smtpmail-debug-info t
-;;        smtpmail-debug-verb t
-        smtpmail-smtp-service 465
-        smtpmail-stream-type 'ssl))
+  (setq smtpmail-smtp-server "mail.eskimo.com")
+      ;;        (setq smtpmail-debug-info t)
+      ;;        (setq smtpmail-debug-verb t)
+  (setq smtpmail-smtp-service 465)
+  (setq smtpmail-stream-type 'ssl))
 
 ;; make sure the subject line is not empty when sending email
 (defun ggreen-notmuch-mua-empty-subject-check ()
