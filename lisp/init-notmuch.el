@@ -36,12 +36,10 @@
   (setq mail-host-address "bit-builder.com")
   (setq user-full-name "Greg Green")
   (setq user-mail-address "ggreen@bit-builder.com")
-  ;; save sent mail in maildir
-  (setq mail-archive-file-name "/home/ggreen/Mail/sent/cur")
   ;; messages with Fcc headers, save via my handler
   (setq message-fcc-handler-function 'ggreen-message-fcc-handler)
-  ;; (add-hook 'message-send-hook 'local-gnus-compose-mode)
   (add-hook 'message-send-hook 'ggreen-notmuch-mua-empty-subject-check)
+  (add-hook 'message-send-hook 'local-gnus-compose-mode)
   :init
   (setq send-mail-function 'smtpmail-send-it)
   (setq smtpmail-smtp-server "mail.eskimo.com")
@@ -86,18 +84,19 @@
   "Keys."
   (local-set-key (kbd "C-c C-c")  'set-smtp-server-message-send-and-exit))
 
-;;; Save the email after it has been sent
+;;; Save the email after it has been sent using Maildir mailbox format
 (defun ggreen-message-fcc-handler (maildir)
   "Store message in `MAILDIR' after
 successful sending. "
-  (make-directory maildir t)
-  (let ( (buf (current-buffer))
-         (field-to (or (message-fetch-field "Newsgroups") (message-fetch-field "To")))
-         (field-subject (message-fetch-field "Subject"))
-         file )
-    (setq file (concat maildir "/" (format-time-string "%F_%T") "_" field-to "_" field-subject))
-    (with-temp-file file
-      (insert-buffer buf))))
+  (let ((sentdir "/home/ggreen/Mail/sent/cur"))
+    (make-directory sentdir t)
+    (let ( (buf (current-buffer))
+           (field-to (or (message-fetch-field "Newsgroups") (message-fetch-field "To")))
+           (field-subject (message-fetch-field "Subject"))
+           file )
+      (setq file (concat sentdir "/" (format-time-string "%F_%T") "_" field-to "_" field-subject))
+      (with-temp-file file
+        (insert-buffer buf)))))
 
 
 (provide 'init-notmuch)
