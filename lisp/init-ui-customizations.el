@@ -42,13 +42,26 @@
 ;; add useful stuff to opening emacs buffer
 (use-package dashboard
   :config
-  (dashboard-setup-startup-hook)
+  (dashboard-setup-startup-hook) ;; necessary
+  (setq dashboard-set-navigator t)
+  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
   (setq dashboard-center-content t)
-  (setq dashboard-items '((recents  . 5)
-                        (bookmarks . 5)
-                        (projects . 5)
-                        (agenda . 5)
-                        (registers . 5))))
+  (setq dashboard-icon-type 'all-the-icons) ;; use 'all-the-icons' package
+  ;; (setq dashboard-icon-type 'nerd-icons) ;; use 'nerd-icons' package
+  ;; (setq dashboard-set-heading-icons t) ;; add icons to widget headings
+  (setq dashboard-set-file-icons t) ;; add icons to widget items
+  ;; a custom widget
+  (defun dashboard-insert-custom (list-size)
+    (insert "Custom text"))
+  (add-to-list 'dashboard-item-generators  '(custom . dashboard-insert-custom))
+                                        ;  (add-to-list 'dashboard-items '(custom) t)
+  ;; set the widgets to each show 5 items
+  (setq dashboard-items '((projects . 5)
+                          (recents  . 5)
+                          (agenda . 5)
+                          (custom . 5)
+                          (bookmarks . 5)
+                          (registers . 5))))
 
 (provide 'init-ui-customizations)

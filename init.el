@@ -60,7 +60,6 @@
 (require 'init-org-mode)
 (require 'init-proced)
 (require 'init-projectile)
-(require 'init-realgud)
 (require 'init-rust-mode)
 (require 'init-scad-mode)
 (require 'init-shx)

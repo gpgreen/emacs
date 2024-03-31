@@ -72,7 +72,7 @@
   :mode "\\.yml\\'"
   :config
   (add-hook 'yaml-mode-hook
-            '(lambda ()
+            #'(lambda ()
                (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
 ;; open files as other user
@@ -92,15 +92,15 @@
 (use-package cc-mode
   :config
   (add-hook 'c-mode-common-hook
-            '(lambda ()
+            #'(lambda ()
                (setq tab-width 4)))
   (add-hook 'c-mode-hook
-            '(lambda ()
+            #'(lambda ()
                (c-toggle-auto-hungry-state 1)
                (setq c-basic-offset 4)
                (c-set-style "stroustrup")))
   (add-hook 'c++-mode-hook
-            '(lambda ()
+            #'(lambda ()
                (c-toggle-auto-hungry-state 1)
                (setq c-basic-offset 4)
                (c-set-style "stroustrup"))))
