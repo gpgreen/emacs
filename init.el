@@ -55,6 +55,7 @@
 (require 'init-js)
 (require 'init-magit)
 (require 'init-markdown)
+(require 'init-mastodon)
 (require 'init-notmuch)
 (require 'init-nov)
 (require 'init-org-mode)
