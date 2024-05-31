@@ -32,6 +32,20 @@
   ;; tag changes when replying
   (setq notmuch-message-replied-tags '("+replied" "-inbox"))
   (setq notmuch-message-forwarded-tags '("+forwarded" "-inbox"))
+  (setq notmuch-saved-searches
+        '((:name "inbox" :query "tag:inbox" :key
+                 [105])
+          (:name "unread" :query "tag:unread" :key
+                 [117])
+          (:name "flagged" :query "tag:flagged" :key
+                 [102])
+          (:name "sent" :query "tag:sent" :key
+                 [116])
+          (:name "drafts" :query "tag:draft" :key
+                 [100])
+          (:name "all mail" :query "*" :key
+                 [97])))
+
   ;; you might want to set the following too
   (setq mail-host-address "bit-builder.com")
   (setq user-full-name "Greg Green")
