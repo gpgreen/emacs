@@ -8,14 +8,14 @@
          nil ;; Does not refer to any other identity
          "Greg Green <ggreen@bit-builder.com>" ;; Sender address
          nil ;; No organization header
-         (("Bcc" . "ggreen@bit-builder.com"))
+         nil ;; No extra headers
          nil ;; No extra body text
          "~/.signature")
         ("gmail"
          nil
          "Greg Green <gpgreen@gmail.com>"
          nil ;; No organization headers
-         (("Bcc" . "gpgreen@gmail.com"))
+         nil ;; No extra headers
          nil
          "~/.signature.gmail")))
   ;; Use "bitbuilder" identity by default
@@ -56,11 +56,11 @@
   (add-hook 'message-send-hook 'local-gnus-compose-mode)
   :init
   (setq send-mail-function 'smtpmail-send-it)
-  (setq smtpmail-smtp-server "mail.eskimo.com")
+  (setq smtpmail-smtp-server "mail.gandi.net")
       ;;        (setq smtpmail-debug-info t)
       ;;        (setq smtpmail-debug-verb t)
-  (setq smtpmail-smtp-service 465)
-  (setq smtpmail-stream-type 'ssl))
+  (setq smtpmail-smtp-service 587)
+  (setq smtpmail-stream-type 'starttls))
 
 ;; make sure the subject line is not empty when sending email
 (defun ggreen-notmuch-mua-empty-subject-check ()
@@ -72,7 +72,7 @@
 ;; Configure known SMTP servers. Emacs prompts for passwords and saves them in ~/.authinfo
 (setq ggreen-smtp-accounts          ;; Format: Sender Mail address - SMTP Server - Port - Username
       '(("gpgreen@gmail.com" "smtp.gmail.com" 465 "gpgreen@gmail.com")
-        ("ggreen@bit-builder.com" "mail.eskimo.com" 465 "ggreen")
+        ("ggreen@bit-builder.com" "mail.gandi.net" 587 "ggreen@bit-builder.com")
         ))
 
 ;; Set the SMTP Server according to the mail address we use for sending

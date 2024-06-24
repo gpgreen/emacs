@@ -83,9 +83,9 @@
   :config
   (xclip-mode 1))
 
-(use-package flycheck
+(use-package flymake
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode))
+  (add-hook 'after-init-hook #'global-flymake-mode))
 
 (use-package toml-mode)
 

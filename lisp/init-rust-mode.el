@@ -2,16 +2,12 @@
 
 ;;; Commentary: my rust mode configuration
 
-(use-package smartparens :ensure t
-  :config (require 'smartparens-rust))
-
 (defun sp1ff/rust/mode-hook ()
   "My rust-mode hook"
 
   (column-number-mode)
   (display-line-numbers-mode)
   (hs-minor-mode)
-  (smartparens-mode)
   (define-key rust-mode-map "\C-ca" 'eglot-code-actions)
   (define-key rust-mode-map (kbd "C-<right>")   'sp-forward-slurp-sexp)
   (define-key rust-mode-map (kbd "C-<left>")    'sp-forward-barf-sexp)
@@ -23,7 +19,6 @@
   (define-key rust-mode-map "\C-c'" 'hs-hide-level)
   (setq indent-tabs-mode nil
         tab-width 4
-        c-basic-offset 4
         fill-column 100))
 
 (use-package rust-mode
@@ -34,19 +29,14 @@
           rust-cargo-bin (concat dot-cargo-bin "cargo")
           rust-format-on-save t)))
 
-(use-package cargo-mode
-  :config
-  (add-hook 'rust-ts-mode-hook 'cargo-minor-mode))
+;; (use-package cargo-mode
+;;   :config
+;;   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
-(use-package clippy-flymake
-  :straight
-  (clippy-flymake
-   :type git
-   :host sourcehut
-   :repo "mgmarlow/clippy-flymake")
-  :hook (rust-mode . clippy-flymake-setup-backend))
+(use-package flymake-clippy
+  :hook (rust-mode . flymake-clippy-setup-backend))
 
-(defun clippy-flymake-manually-activate-flymake ()
+(defun flymake-clippy-manually-activate-flymake ()
   "Shim for working around eglot's tendency to suppress flymake backends."
   (add-hook 'flymake-diagnostic-functions #'eglot-flymake-backend nil t)
   (flymake-mode 1))
@@ -57,7 +47,7 @@
 (use-package eglot
   :ensure t
   :hook ((rust-mode . eglot-ensure)
-         (eglot-managed-mode . clippy-flymake-manually-activate-flymake))
+         (eglot-managed-mode . flymake-clippy-manually-activate-flymake))
   :config
   (add-to-list 'eglot-stay-out-of 'flymake))
 
