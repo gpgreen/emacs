@@ -83,10 +83,6 @@
   :config
   (xclip-mode 1))
 
-(use-package flymake
-  :config
-  (add-hook 'after-init-hook #'global-flymake-mode))
-
 (use-package toml-mode)
 
 (use-package cc-mode

@@ -2,36 +2,27 @@
 
 ;;; Commentary: my rust mode configuration
 
-(defun sp1ff/rust/mode-hook ()
-  "My rust-mode hook"
-
-  (column-number-mode)
-  (display-line-numbers-mode)
-  (hs-minor-mode)
-  (define-key rust-mode-map "\C-ca" 'eglot-code-actions)
-  (define-key rust-mode-map (kbd "C-<right>")   'sp-forward-slurp-sexp)
-  (define-key rust-mode-map (kbd "C-<left>")    'sp-forward-barf-sexp)
-  (define-key rust-mode-map (kbd "C-M-<right>") 'sp-backward-slurp-sexp)
-  (define-key rust-mode-map (kbd "C-M-<left>")  'sp-backward-barf-sexp)
-  (define-key rust-mode-map "\C-c>" 'hs-show-all)
-  (define-key rust-mode-map "\C-c<" 'hs-hide-all)
-  (define-key rust-mode-map "\C-c;" 'hs-toggle-hiding)
-  (define-key rust-mode-map "\C-c'" 'hs-hide-level)
-  (setq indent-tabs-mode nil
-        tab-width 4
-        fill-column 100))
-
 (use-package rust-mode
-  :hook (rust-mode . sp1ff/rust/mode-hook)
   :config
   (let ((dot-cargo-bin (expand-file-name "~/.cargo/bin/")))
     (setq rust-rustfmt-bin (concat dot-cargo-bin "rustfmt")
           rust-cargo-bin (concat dot-cargo-bin "cargo")
-          rust-format-on-save t)))
+          rust-format-on-save t
+          fill-column 100
+          indent-tabs-mode nil))
+  (column-number-mode)
+  ; (hs-minor-mode))
+  (display-line-numbers-mode))
 
-;; (use-package cargo-mode
-;;   :config
-;;   (add-hook 'rust-mode-hook 'cargo-minor-mode))
+;; cargo-mode has some good features
+;; use prefix C-u before command to add options
+(use-package cargo-mode
+  :hook (rust-mode . cargo-minor-mode)
+  :config
+  ;; to change the keymap from C-c a
+  ; (keymap-set cargo-minor-mode-map (kbd ...) 'cargo-mode-command-map)
+  (setq compilation-scroll-output t
+        cargo-mode-use-comint nil))
 
 (use-package flymake-clippy
   :hook (rust-mode . flymake-clippy-setup-backend))
@@ -45,7 +36,6 @@
 ;; <https://github.com/joaotavora/eglot/issues/268> This workaround will
 ;; add `flymake-clippy'
 (use-package eglot
-  :ensure t
   :hook ((rust-mode . eglot-ensure)
          (eglot-managed-mode . flymake-clippy-manually-activate-flymake))
   :config
