@@ -2,9 +2,17 @@
 
 ;;; Commentary: my rust mode configuration
 
+;; find where the cargo directory is
+;; if we are running as a flatpak, it is in the sdk
+;; directory, otherwise in the usual place
+(defun ggreen-find-cargo-bin-dir()
+  (if (eq (getenv "FLATPAK_ID") "org.gnu.emacs")
+      "/usr/lib/sdk/rust-stable/bin/"
+    (expand-file-name "~/.cargo/bin/")))
+
 (use-package rust-mode
   :config
-  (let ((dot-cargo-bin (expand-file-name "~/.cargo/bin/")))
+  (let ((dot-cargo-bin (ggreen-find-cargo-bin-dir)))
     (setq rust-rustfmt-bin (concat dot-cargo-bin "rustfmt")
           rust-cargo-bin (concat dot-cargo-bin "cargo")
           rust-format-on-save t
@@ -20,9 +28,11 @@
   :hook (rust-mode . cargo-minor-mode)
   :config
   ;; to change the keymap from C-c a
-  ; (keymap-set cargo-minor-mode-map (kbd ...) 'cargo-mode-command-map)
-  (setq compilation-scroll-output t
-        cargo-mode-use-comint nil))
+  ;; (keymap-set cargo-minor-mode-map (kbd ...) 'cargo-mode-command-map)
+  (let ((dot-cargo-bin (ggreen-find-cargo-bin-dir)))
+    (setq cargo-path-to-bin (concat dot-cargo-bin "cargo")
+          compilation-scroll-output t
+          cargo-mode-use-comint nil)))
 
 (use-package flymake-clippy
   :hook (rust-mode . flymake-clippy-setup-backend))
