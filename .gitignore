@@ -9,6 +9,7 @@ persist/
 straight/build*
 straight/repos/
 transient/
+tree-sitter/
 ido.last
 recentf
 tramp

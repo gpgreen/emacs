@@ -101,4 +101,12 @@
                (setq c-basic-offset 4)
                (c-set-style "stroustrup"))))
 
+;; find where the cargo directory is
+;; if we are running as a flatpak, it is in the sdk
+;; directory, otherwise in the usual place
+(defun ggreen-find-cargo-bin-dir()
+  (if (equal (getenv "FLATPAK_ID") "org.gnu.emacs")
+      "/usr/lib/sdk/rust-stable/bin/"
+    (expand-file-name "~/.cargo/bin/")))
+
 (provide 'init-common)

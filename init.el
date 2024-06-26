@@ -47,6 +47,11 @@
 ;; where to find all the init file lisp code
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; -- TREE-SITTER --
+;; Check for non-nil environment variable to see if tree-sitter should be used
+;; ---------------------------------------------------------------------------
+(setq ggreen-use-tree-sitter-modes (getenv "EMACS_USE_TREESITTER_MODES"))
+
 ;; load up all the init file code
 (require 'init-common)
 (require 'init-beancount)
@@ -61,13 +66,15 @@
 (require 'init-org-mode)
 (require 'init-proced)
 (require 'init-projectile)
-(require 'init-rust-mode)
 (require 'init-scad-mode)
 (require 'init-shx)
 (require 'init-slime)
 (require 'init-themes)
-(require 'init-treemacs)
-;(require 'init-treesitter)
 (require 'init-ui-customizations)
 (require 'init-web-mode)
 (require 'init-yasnippet)
+(if ggreen-use-tree-sitter-modes
+    (progn
+     (require 'init-treesitter)
+     (require 'init-rust-ts-mode))
+  (require 'init-rust-mode))
