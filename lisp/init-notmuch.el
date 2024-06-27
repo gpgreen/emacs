@@ -29,6 +29,9 @@
 ;;; Use notmuch email client
 (use-package notmuch
   :config
+  ;; if in the flatpak, use home directory shell script helper
+  (if (equal (getenv "FLATPAK_ID") "org.gnu.emacs")
+      (setq notmuch-command "/var/home/ggreen/bin/notmuch.sh"))
   ;; tag changes when replying
   (setq notmuch-message-replied-tags '("+replied" "-inbox"))
   (setq notmuch-message-forwarded-tags '("+forwarded" "-inbox"))
