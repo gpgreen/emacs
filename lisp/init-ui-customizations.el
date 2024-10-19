@@ -7,7 +7,10 @@
 (line-number-mode 1)
 ;(scroll-bar-mode -1)
 (setq inhibit-startup-screen t)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(if (window-system)
+    (progn
+      (set-frame-width (selected-frame) 320)
+      (set-frame-height (selected-frame) 80)))
 (setq compilation-scroll-output t)
 
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)

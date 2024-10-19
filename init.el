@@ -55,6 +55,7 @@
 ;; load up all the init file code
 (require 'init-common)
 (require 'init-beancount)
+(require 'init-elfeed)
 (require 'init-fish)
 (require 'init-fontaine)
 (require 'init-font-switching)
